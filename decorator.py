@@ -45,7 +45,7 @@ def dictsonize(func):
         except IOError:
             delays = []
 
-        ret = {'fail': 0, 'pass': 0, 'error': 0, 'time':0, 'delays' : delays}
+        ret = {'fail': 0, 'pass': 0, 'error': 0, 'time':0, 'request_num' : len(delays), 'request_total_time' : sum(delays)}
         ret[r] = 1
         ret['time'] = end - start
 
@@ -54,7 +54,8 @@ def dictsonize(func):
                         'end':end,
                         'result': r,
                         'time' : end - start,
-                        'delays' : delays
+                        'request_num' : len(delays),
+                        'request_total_time' : sum(delays)
                         }]
                     })
         return json.dumps(ret)

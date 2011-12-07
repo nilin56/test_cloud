@@ -6,7 +6,7 @@ from decorator import dictsonize
 def test_r():
     try:
         for i in range(10):
-            url = 'http://123.138.22.46/dokuwiki/doku.php?id=content'
+            url = 'http://123.138.22.46/dokuwiki/doku.php?do=search&id=content'
             r = urllib.urlopen(url)
             r = urllib.urlopen(url)
             r = r.read()
