@@ -1,12 +1,11 @@
 import urllib
 import decorator
-from decorator import test_jsonize
+from decorator import dictsonize
 
-@test_jsonize
+@dictsonize
 def test_r():
     try:
         url = 'http://123.138.22.46/dokuwiki/doku.php?do=search&id=content'
-        r = urllib.urlopen(url)
         r = urllib.urlopen(url)
         r = urllib.urlopen(url)
         r = r.read()

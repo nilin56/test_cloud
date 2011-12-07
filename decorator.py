@@ -1,7 +1,7 @@
 import urllib
 
 real_urlopen = urllib.urlopen
-def _ptr(a):
+def _urlopen(a):
     import os
     import time
     import json
@@ -23,9 +23,9 @@ def _ptr(a):
     f.write(json.dumps(delays))
 
     return r
-urllib.urlopen = _ptr
+urllib.urlopen = _urlopen
 
-def test_jsonize(func):
+def dictsonize(func):
     import json
     import time
     def _(*a, **kw):
