@@ -30,6 +30,7 @@ class mapreduce:
             
     def mapper(self,taskName, tasks):
         import threading
+        print 'map to children'
 
         resultList = []   
         threads = []
@@ -56,9 +57,11 @@ class mapreduce:
                     result[k] += v
                 else:
                     result[k] = v
+        print 'finish reduce results'
         return json.dumps(result)
      
     def worker(self, taskName, tasks):
+        print 'work on %s'%taskName
         if taskName == 'capacity':
             return capacity_worker(tasks)
         elif taskName == 'test_job':

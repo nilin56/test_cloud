@@ -46,7 +46,7 @@ def dictsonize(func):
             delays = []
 
         ret = {'fail_num': 0, 'pass_num': 0, 'error_num': 0, 'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
-        ret[r] = 1
+        ret['%s_num'%r] = 1
         ret['time'] = end - start
 
         ret.update({'results' : [{
