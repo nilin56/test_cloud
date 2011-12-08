@@ -70,7 +70,7 @@ class mapreduce:
 	print web.ctx['env']['HTTP_HOST']
         return str(web.ctx['env']['HTTP_HOST'])
 
-def test_worker(web_input)
+def test_worker(web_input):
     request = json.loads(web_input.request)            
     from muti_thread_test import main as muti_test
     for k, v in request:
