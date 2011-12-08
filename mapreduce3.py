@@ -9,39 +9,35 @@ urls = (
     )
 app = web.application(urls, globals())
 
-tast_dis = {'capacity':1}
-def mapper_1(task, children):
-    capacity
-    return {childname:sub_task}
-
-
 class port:
     def GET(self,task=None):
         return str(web.ctx).replace(',',',\n').replace('{','\n\n\n{').replace('}','}\n\n\n')
 
 class mapreduce:
-    def GET(self,task=None):
+    def GET(self,taskName=None):
         self.para = web.input()
+
+        tasks = json.loads(web.input().request)
 
         if CHILDREN[self.my_port()]:
 	    print CHILDREN[self.my_port()]
-            return self.mapreduce(task)
+            return self.mapreduce(taskName, tasks)
         else :
-            return self.worker(task,self.para)
+            return self.worker(taskName, tasks)
        
 
-    def mapreduce(self,task):
-        return self.reducer(self.mapper(task))
+    def mapreduce(self,taskName, tasks):
+        return self.reducer(self.mapper(taskName, tasks))
             
-    def mapper(self,task):
+    def mapper(self,taskName, tasks):
         import threading
 
         resultList = []   
         threads = []
-        
+
         nloops = range(len(CHILDREN[self.my_port()]))
         for i in nloops:
-            t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i],resultList,task,self.para))
+            t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i], resultList, taskName, tasks))
             threads.append(t)
         for i in nloops:
             threads[i].start()
@@ -60,24 +56,23 @@ class mapreduce:
                     result[k] = v
         return json.dumps(result)
      
-    def worker(self,taskName,web_input):
+    def worker(self, taskName, tasks):
         if taskName == 'capacity':
-            return capacity_worker(web_input)
+            return capacity_worker(tasks)
         elif taskName == 'test_job':
-            return test_worker(web_input)
+            return test_worker(tasks)
 
     def my_port(self):
 	print web.ctx['env']['HTTP_HOST']
         return str(web.ctx['env']['HTTP_HOST'])
 
-def test_worker(web_input):
-    request = json.loads(web_input.request)            
+def test_worker(tasks):
     from muti_thread_test import main as muti_test
-    for k, v in request:
+    for k, v in tasks:
         return json.dumps(muti_test(k, v))
 
-def capacity_worker(web_input):
-    request = json.loads(web_input.request)            
+def capacity_worker(tasks):
+    request = tasks            
     MEM_PER = float(request['mem'])   
     CPU_PER = float(request['cpu'])
     LATENCY = float(request['latency'])
@@ -104,14 +99,14 @@ def capacity_worker(web_input):
     count = min(cpucount, memcount, netcount)
     return json.dumps({'machine_count' : 1, 'capacity' : int(count)})
 
-def call(child,resultList,task,para):
+def call(child, resultList, taskName, tasks):
     query = '?'
-    for k, v in para.items():
+    for k, v in tasks.items():
         query += '&' + k + '=' + v
     import urllib2
     import urllib
     print child+'/mapreduce/'+ task +query
-    result = json.loads(urllib.urlopen(child+'/mapreduce/'+ task +query).read())
+    result = json.loads(urllib.urlopen(child+'/mapreduce/'+ taskName +query).read())
     print child, result
     resultList.append(result)
   

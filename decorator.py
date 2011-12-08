@@ -18,7 +18,7 @@ def _urlopen(a):
     except IOError:
         delays = []
     
-    delays.append(t_end - t_start)
+    delays.append([t_end - t_start, t_start])
     f = open(fname, 'w')
     f.write(json.dumps(delays))
 
@@ -45,7 +45,7 @@ def dictsonize(func):
         except IOError:
             delays = []
 
-        ret = {'fail': 0, 'pass': 0, 'error': 0, 'time':0, 'request_num' : len(delays), 'request_total_time' : sum(delays)}
+        ret = {'fail': 0, 'pass': 0, 'error': 0, 'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
         ret[r] = 1
         ret['time'] = end - start
 
@@ -55,7 +55,8 @@ def dictsonize(func):
                         'result': r,
                         'time' : end - start,
                         'request_num' : len(delays),
-                        'request_total_time' : sum(delays)
+                        'request_total_time' : sum([delay for delay, start_time in delays]),
+                        'delays' : delays
                         }]
                     })
         return json.dumps(ret)
