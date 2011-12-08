@@ -24,6 +24,7 @@ class mapreduce:
         self.para = web.input()
 
         if CHILDREN[self.my_port()]:
+	    print CHILDREN[self.my_port()]
             return self.mapreduce(task)
         else :
             return self.worker(task,self.para)
@@ -65,7 +66,8 @@ class mapreduce:
             return capacity_worker(web_input)
 
     def my_port(self):
-        return int(web.ctx['env']['HTTP_HOST'])
+	print web.ctx['env']['HTTP_HOST']
+        return str(web.ctx['env']['HTTP_HOST'])
 
 def capacity_worker(web_input):
     request = json.loads(web_input.request)            
@@ -100,8 +102,10 @@ def call(child,resultList,task,para):
     for k, v in para.items():
         query += '&' + k + '=' + v
     import urllib2
-    result = json.loads(urllib2.urlopen(child+'/mapreduce/'+ task +query).read())
-    print child,result
+    import urllib
+    print child+'/mapreduce/'+ task +query
+    result = json.loads(urllib.urlopen(child+'/mapreduce/'+ task +query).read())
+    print child, result
     resultList.append(result)
   
 def latency(minute=None):
