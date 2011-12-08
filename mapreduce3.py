@@ -34,8 +34,12 @@ class mapreduce:
 
         resultList = []   
         threads = []
-
+        
         nloops = range(len(CHILDREN[self.my_port()]))
+
+        for script, num in tasks.items():
+            tasks[script] = int(num*1.0/len(nloops)) + 1 
+
         for i in nloops:
             t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i], resultList, taskName, tasks))
             threads.append(t)
