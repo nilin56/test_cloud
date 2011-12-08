@@ -20,7 +20,6 @@ class mapreduce:
         tasks = json.loads(web.input().request)
 
         if CHILDREN[self.my_port()]:
-	    print CHILDREN[self.my_port()]
             return self.mapreduce(taskName, tasks)
         else :
             return self.worker(taskName, tasks)
@@ -38,7 +37,7 @@ class mapreduce:
         nloops = range(len(CHILDREN[self.my_port()]))
 
         for script, num in tasks.items():
-            tasks[script] = int(num*1.0/len(nloops)) + 1 
+            tasks[script] = int(num*1.0/len(nloops))
 
         for i in nloops:
             t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i], resultList, taskName, tasks))
@@ -47,7 +46,6 @@ class mapreduce:
             threads[i].start()
         for i in nloops:
             threads[i].join()
-        print 'result List ', resultList
         return resultList   
             
     def reducer(self,resultList):
@@ -67,7 +65,6 @@ class mapreduce:
             return test_worker(tasks)
 
     def my_port(self):
-	print web.ctx['env']['HTTP_HOST']
         return str(web.ctx['env']['HTTP_HOST'])
 
 def test_worker(tasks):
@@ -104,16 +101,16 @@ def capacity_worker(tasks):
     return json.dumps({'machine_count' : 1, 'capacity' : int(count)})
 
 def call(child, resultList, taskName, tasks):
-    print tasks
     query = '?request=' + json.dumps(tasks)
     url = child+'/mapreduce/'+ taskName +query
+    print 'call: %s'%url
     import urllib2
     import urllib
     try:
         result = json.loads(urllib.urlopen(url).read())
     except:
         result = {'fail_node': [url]}
-    print child, result
+    print 'child(%s) get result'%child
     resultList.append(result)
   
 def latency(minute=None):

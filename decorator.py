@@ -45,7 +45,7 @@ def dictsonize(func):
         except IOError:
             delays = []
 
-        ret = {'fail': 0, 'pass': 0, 'error': 0, 'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
+        ret = {'fail_num': 0, 'pass_num': 0, 'error_num': 0, 'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
         ret[r] = 1
         ret['time'] = end - start
 
