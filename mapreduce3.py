@@ -100,12 +100,11 @@ def capacity_worker(tasks):
     return json.dumps({'machine_count' : 1, 'capacity' : int(count)})
 
 def call(child, resultList, taskName, tasks):
-    query = '?'
-    for k, v in tasks.items():
-        query += '&' + k + '=' + v
+    print tasks
+    query = '?request=' + json.dumps(tasks)
+    print child+'/mapreduce/'+ taskName +query
     import urllib2
     import urllib
-    print child+'/mapreduce/'+ task +query
     result = json.loads(urllib.urlopen(child+'/mapreduce/'+ taskName +query).read())
     print child, result
     resultList.append(result)
