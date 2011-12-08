@@ -108,7 +108,7 @@ def call(child, resultList, taskName, tasks):
     try:
         result = json.loads(urllib.urlopen(url).read())
     except:
-        resutl = {'fail_node': [url]}
+        result = {'fail_node': [url]}
     print child, result
     resultList.append(result)
   
