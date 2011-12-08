@@ -63,7 +63,7 @@ class mapreduce:
     def worker(self,taskName,web_input):
         if taskName == 'capacity':
             return capacity_worker(web_input)
-        elif tastName == 'test_job':
+        elif taskName == 'test_job':
             return test_worker(web_input)
 
     def my_port(self):
