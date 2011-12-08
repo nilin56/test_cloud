@@ -1,7 +1,8 @@
 import web
 import json
 #request url is : http://0.0.0.0:9003/mapreduce/capacity?request={%22mem%22:%201000,%20%22latency%22:%20100,%20%22cpu%22:%200.01}
-CHILDREN = {9000:['http://0.0.0.0:9001'],9001:['http://0.0.0.0:9002','http://0.0.0.0:9003'],9002:[],9003:[],9004:[]}
+#CHILDREN = {9000:['http://0.0.0.0:9001'],9001:['http://0.0.0.0:9002','http://0.0.0.0:9003'],9002:[],9003:[],9004:[]}
+from node_map import NODE_MAP as CHILDREN
 urls = (
     '/mapreduce/(.*)','mapreduce',
     '/port','port'
@@ -64,7 +65,7 @@ class mapreduce:
             return capacity_worker(web_input)
 
     def my_port(self):
-        return int(web.ctx['env']['SERVER_PORT'])
+        return int(web.ctx['env']['HTTP_HOST'])
 
 def capacity_worker(web_input):
     request = json.loads(web_input.request)            
