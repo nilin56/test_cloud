@@ -62,12 +62,19 @@ class mapreduce:
      
     def worker(self,taskName,web_input):
         if taskName == 'capacity':
-
             return capacity_worker(web_input)
+        elif tastName == 'test_job':
+            return test_worker(web_input)
 
     def my_port(self):
 	print web.ctx['env']['HTTP_HOST']
         return str(web.ctx['env']['HTTP_HOST'])
+
+def test_worker(web_input)
+    request = json.loads(web_input.request)            
+    from muti_thread_test import main as muti_test
+    for k, v in request:
+        return json.dumps(muti_test(k, v))
 
 def capacity_worker(web_input):
     request = json.loads(web_input.request)            
