@@ -68,7 +68,7 @@ class mapreduce:
 
 def test_worker(tasks):
     from muti_thread_test import main as muti_test
-    for k, v in tasks:
+    for k, v in tasks.items():
         return json.dumps(muti_test(k, v))
 
 def capacity_worker(tasks):
@@ -102,10 +102,13 @@ def capacity_worker(tasks):
 def call(child, resultList, taskName, tasks):
     print tasks
     query = '?request=' + json.dumps(tasks)
-    print child+'/mapreduce/'+ taskName +query
+    url = child+'/mapreduce/'+ taskName +query
     import urllib2
     import urllib
-    result = json.loads(urllib.urlopen(child+'/mapreduce/'+ taskName +query).read())
+    try:
+        result = json.loads(urllib.urlopen(url).read())
+    except:
+        resutl = {'fail_node': [url]}
     print child, result
     resultList.append(result)
   
