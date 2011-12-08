@@ -5,7 +5,7 @@ from decorator import dictsonize
 @dictsonize
 def test_read():
     try:
-        for i in range(12)
+        for i in range(2):
             url = 'http://123.138.22.46/dokuwiki/doku.php?id=content'
             r = urllib.urlopen(url)
             r = urllib.urlopen(url)
