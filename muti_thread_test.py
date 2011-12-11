@@ -5,20 +5,26 @@ import time
 
 
 def exe_script(script_name, result_list):
-    command = 'python %s'%script_name
-    dict_str = os.popen(command).read()
-    result_list.append(json.loads(dict_str))
+    executor = {
+        'py' : 'python',
+        'js' : 'javascript'
+    }
+    try:
+        script_type = script_name.split('.')[-1] 
+        command = '%s %s'%(executor[script_type], script_name)
+        dict_str = os.popen(command).read()
+        result_list.append(json.loads(dict_str))
+    except:
+        result_list.append({'script_execution_error_num': 1 })
 
 def run(script_name, n):
     result_list = []
     threads = []
     for i in range(n):
-        t = threading.Thread(target=exe_script, args=(script_name, result_list))
+        t = threading.Thread(target=exe_script, args=(script_name,result_list))
         threads.append(t)
-
     for t in threads:
         t.start()
-
     for t in threads:
         t.join()
 
@@ -34,23 +40,25 @@ def reduce(dicts):
                 result[k] = v
     return result
 
-def main(script_name, n):
-    s= time.time()
+def exe_script_n_times(script_name, n, result_list):
+    #in case float type on script_time
+    n = int(n)
     dicts = run(script_name, n)
-    last = time.time()-s
     result = reduce(dicts)
-    result['last'] = last
-    return result
+    result_list.append(result)
+
+def main(task_dict):
+    result_list = []
+    threads = []
+    for script_name, n in task_dict.items():
+        t = threading.Thread(target=exe_script_n_times, args=(script_name, n, result_list))
+        threads.append(t)
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+
+    return reduce(result_list)
 
 if __name__ == '__main__':
-    from time import sleep
-    for n in (1, 2, 5, 10, 15, 20, 25 ,30, 40, 50, 60, 70, 80, 90, 100, 120, 140, 160,180, 200):
-        print n,
-        #for script in ['test_wiki_write.py']:
-        for script in ['test_wiki_read.py', 'test_wiki_search.py']:
-            result = main(script, n)
-
-            del(result['results'])
-            print '%s'%(n*1.0/result['last']),
-            sleep(10)
-        print ''
+    print main({'test_wiki_read.py':2, 'test_wiki_search.py':3})

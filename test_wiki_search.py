@@ -3,7 +3,7 @@ import decorator
 from decorator import dictsonize
 
 @dictsonize
-def test_r():
+def test_search():
     try:
         for i in range(10):
             url = 'http://123.138.22.46/dokuwiki/doku.php?do=search&id=content'
@@ -17,7 +17,7 @@ def test_r():
     return 'pass'
 
 def main():
-    r = test_r()
+    r = test_search()
     print r
     return r
 
