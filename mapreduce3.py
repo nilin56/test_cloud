@@ -5,13 +5,20 @@ import json
 from node_map import NODE_MAP as CHILDREN
 urls = (
     '/mapreduce/(.*)','mapreduce',
-    '/port','port'
+    '/port','port',
+    '/children','children',
     )
 app = web.application(urls, globals())
 
 class port:
     def GET(self,task=None):
         return str(web.ctx).replace(',',',\n').replace('{','\n\n\n{').replace('}','}\n\n\n')
+
+class children:
+    def GET(self,task=None):
+        port = web.ctx['env']['HTTP_HOST']
+        return str(CHILDREN(port)).replace(',', ',\n')
+
 
 class mapreduce:
     def GET(self,taskName=None):
