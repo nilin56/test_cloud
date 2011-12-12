@@ -75,12 +75,15 @@ def dictsonize(func):
         ret['%s_%s_num'%(func.__name__, r)] = 1
         ret['%s_%s_num'%('total', r)] = 1
         ret['time'] = end - start
-        ret['max']={}
-        ret['max']['time'] = delays[-1][1]
-        ret['max']['delay'] = max(delays)[0]
-        ret['min']={}
-        ret['min']['time'] = delays[0][1]
-        ret['min']['delay'] = min(delays)[0]
+        try:
+            ret['max']={}
+            ret['max']['time'] = delays[-1][1]
+            ret['max']['delay'] = max(delays)[0]
+            ret['min']={}
+            ret['min']['time'] = delays[0][1]
+            ret['min']['delay'] = min(delays)[0]
+        except IndexError:
+            pass
 
         '''
         ret.update({'results' : [{
