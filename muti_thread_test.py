@@ -25,9 +25,9 @@ def run(script_name, n):
         threads.append(t)
     i = 0
     for t in threads:
-        i += 1
         try :
             t.start()
+            i += 1
         except:
             print 'thread %s failed'%i
             break
