@@ -30,6 +30,7 @@ def run(script_name, n):
             t.start()
         except:
             print 'thread %s failed'%i
+            break
     for t in threads[i]:
         t.join()
 
