@@ -17,7 +17,8 @@ class port:
 class children:
     def GET(self,task=None):
         port = web.ctx['env']['HTTP_HOST']
-        return str(CHILDREN(port)).replace(',', ',\n')
+        print (CHILDREN[port])
+        return (CHILDREN[port]).__str__().replace(',', ',\n')
 
 
 class mapreduce:
