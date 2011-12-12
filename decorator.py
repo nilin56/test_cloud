@@ -1,4 +1,4 @@
-import urllib
+import urllib, urllib2
 
 real_urlopen = urllib.urlopen
 def _urlopen(a):
@@ -25,6 +25,32 @@ def _urlopen(a):
     return r
 urllib.urlopen = _urlopen
 
+real_urlopen2 = urllib2.urlopen
+def _urlopen2(a):
+    import os
+    import time
+    import json
+    pid = os.getpid()
+    fname = 'pid_%s_delay'%pid
+
+    t_start = time.time()
+    r = real_urlopen2(a)
+    t_end = time.time()
+    
+    try:
+        f = open(fname, 'r')
+        delays = json.loads(f.read())
+    except IOError:
+        delays = []
+    
+    delays.append([t_end - t_start, t_start])
+    f = open(fname, 'w')
+    f.write(json.dumps(delays))
+
+    return r
+urllib2.urlopen = _urlopen2
+
+
 def dictsonize(func):
     import json
     import time
@@ -47,6 +73,7 @@ def dictsonize(func):
 
         ret = {'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
         ret['%s_%s_num'%(func.__name__, r)] = 1
+        ret['%s_%s_num'%('total', r)] = 1
         ret['time'] = end - start
         ret['max']={}
         ret['max']['time'] = delays[-1][1]
