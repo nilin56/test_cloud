@@ -46,7 +46,10 @@ class mapreduce:
         nloops = range(len(CHILDREN[self.my_port()]))
 
         for script, num in tasks.items():
-            tasks[script] = (num*1.0/len(nloops))
+            if taskName == 'capacity':
+                tasks[script] = (num*1.0)
+            else:
+                tasks[script] = (num*1.0/len(nloops))
 
         for i in nloops:
             t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i], resultList, taskName, tasks))
@@ -58,6 +61,7 @@ class mapreduce:
         return resultList   
             
     def reducer(self,resultList):
+        print 'reduce results'
         result = {}
         for i in resultList:
             for k, v in i.items():
@@ -85,6 +89,7 @@ class mapreduce:
 
 def test_worker(tasks):
     #tasks is a dict as{'a.py':2, 'b.py':3}
+    print 'muti_thread_test'
     from muti_thread_test import main as muti_test
     return json.dumps(muti_test(tasks))
 

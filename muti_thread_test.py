@@ -23,9 +23,14 @@ def run(script_name, n):
     for i in range(n):
         t = threading.Thread(target=exe_script, args=(script_name,result_list))
         threads.append(t)
+    i = 0
     for t in threads:
-        t.start()
-    for t in threads:
+        i += 1
+        try :
+            t.start()
+        except:
+            print 'thread %s failed'%i
+    for t in threads[i]:
         t.join()
 
     return result_list
