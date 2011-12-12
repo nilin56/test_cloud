@@ -35,7 +35,12 @@ def reduce(dicts):
     for d in dicts:
         for k, v in d.iteritems():
             if k in result:
-                result[k] += v
+                if k not in ['max', 'min']:
+                    result[k] += v
+                else:
+                    methods = {'max':max, 'min':min}
+                    for kk, vv in v.items():
+                        result[k][kk] = methods[k](str(vv), result[k].get(kk, '0'))
             else :
                 result[k] = v
     return result
