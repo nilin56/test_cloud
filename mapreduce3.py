@@ -62,7 +62,12 @@ class mapreduce:
         for i in resultList:
             for k, v in i.items():
                 if k in result.keys():
-                    result[k] += v
+                    if k not in ['max', 'min']:
+                        result[k] += v
+                    else:
+                        methods = {'max':max, 'min':min}
+                        for kk, vv in v.items():
+                            result[k][kk] = methods[k](vv, result[k].get(kk, 0))
                 else:
                     result[k] = v
         print 'finish reduce results'

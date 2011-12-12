@@ -48,7 +48,13 @@ def dictsonize(func):
         ret = {'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
         ret['%s_%s_num'%(func.__name__, r)] = 1
         ret['time'] = end - start
+        ret['max']={}
+        ret['max']['time'] = delays[-1][1]
+        ret['max']['delay'] = max(delays)[0]
+        ret['min']={'time': delay[0][1]}
+        ret['min']['delay'] = min(delays)[0]
 
+        '''
         ret.update({'results' : [{
                         'start':start, 
                         'end':end,
@@ -59,5 +65,6 @@ def dictsonize(func):
                         'delays' : delays
                         }]
                     })
+        '''
         return json.dumps(ret)
     return _
