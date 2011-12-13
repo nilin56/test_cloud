@@ -1,4 +1,5 @@
-case = ['test_wiki_read.py', 'test_wiki_search.py', 'test_wiki_write']
+#case = ['test_wiki_read.py', 'test_wiki_search.py', 'test_wiki_write.py']
+case = ['test_wiki_write.py']
 num = [30, 60, 120, 180, 240, 300, 360, 420, 480, 540, 600, 660, 720]
 base_url = 'http://192.168.0.126:9002/mapreduce/test_job?request='
 

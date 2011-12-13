@@ -78,6 +78,7 @@ def dictsonize(func):
         try:
             ret['max']={}
             ret['max']['time'] = delays[-1][1]
+            ret['max']['test_time'] = end -start
             ret['max']['delay'] = max(delays)[0]
             ret['min']={}
             ret['min']['time'] = delays[0][1]
