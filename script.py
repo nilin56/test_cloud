@@ -15,5 +15,5 @@ for c in case:
         r = json.loads(r)
         print r['max']['test_time'],
         print r['total_pass_num']*1.0/n, 
-        print r['request_num']*1.0/(float(r['max']['test_time']),
+        print r['request_num']*1.0/float(r['max']['test_time']) ,
         print r['request_total_time']/r['request_num']
