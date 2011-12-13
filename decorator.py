@@ -74,6 +74,9 @@ def dictsonize(func):
         ret = {'time':0, 'request_num' : len(delays), 'request_total_time' : sum( [delay for delay, start_time in delays])}
         ret['%s_%s_num'%(func.__name__, r)] = 1
         ret['%s_%s_num'%('total', r)] = 1
+
+        ret['%s_%s_time'%(func.__name__, 'request')] = ret['request_total_time']
+        ret['%s_%s_num'%(func.__name__, 'request')] = 1
         ret['time'] = end - start
         try:
             ret['max']={}
