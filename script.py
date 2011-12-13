@@ -13,6 +13,7 @@ for c in case:
         s = json.dumps({c :n}) 
         r = urllib.urlopen(base_url + s ).read()
         r = json.loads(r)
+        print r['max']['test_time'],
         print r['total_pass_num']*1.0/n, 
-        print r['request_num']*1.0/(float(r['max']['time'])-float(r['min']['time'])),
+        print r['request_num']*1.0/(float(r['max']['test_time']),
         print r['request_total_time']/r['request_num']
