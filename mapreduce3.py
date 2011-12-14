@@ -90,8 +90,6 @@ class mapreduce:
         elif taskName == 'test_job':
             return test_worker(tasks)
 
-    def my_port(self):
-        return str(web.ctx['env']['HTTP_HOST'])
   
     def check_capacity_before_map():
         resultList = {}
@@ -110,6 +108,9 @@ class mapreduce:
             resultList[child] = result
         print resultList
         return resultList
+
+    def my_port(self):
+        return str(web.ctx['env']['HTTP_HOST'])
 
 def test_worker(tasks):
     #tasks is a dict as{'a.py':2, 'b.py':3}
