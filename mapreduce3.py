@@ -61,6 +61,7 @@ class mapreduce:
 
         if 'taskName' != 'capacity':
             print 123
+            self.check_capacity_before_map()
             #capacity_list = self.check_capacity_before_map()
 
         resultList = []   
