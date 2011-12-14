@@ -9,24 +9,6 @@ urls = (
     '/children','children',
     )
 app = web.application(urls, globals())
- 
-def check_capacity_before_map():
-    resultList = {}
-    for child in CHILDREN[self.my_port()]:
-        task = {"mem":1000,"latency":100,"cpu":0.005}
-        query = '?request=' + json.dumps(tasks)
-        url = child+'/mapreduce/'+ taskName +query
-        print 'call: %s'%child
-        import urllib2
-        import urllib
-        try:
-            result = json.loads(urllib.urlopen(url).read())
-        except:
-            result = {'fail_node': [url]}
-        print 'child(%s) get result'%child
-        resultList[child] = result
-    print resultList
-    return resultList
             
 
 
@@ -110,6 +92,24 @@ class mapreduce:
 
     def my_port(self):
         return str(web.ctx['env']['HTTP_HOST'])
+  
+    def check_capacity_before_map():
+        resultList = {}
+        for child in CHILDREN[self.my_port()]:
+            task = {"mem":1000,"latency":100,"cpu":0.005}
+            query = '?request=' + json.dumps(tasks)
+            url = child+'/mapreduce/'+ taskName +query
+            print 'call: %s'%child
+            import urllib2
+            import urllib
+            try:
+                result = json.loads(urllib.urlopen(url).read())
+            except:
+                result = {'fail_node': [url]}
+            print 'child(%s) get result'%child
+            resultList[child] = result
+        print resultList
+        return resultList
 
 def test_worker(tasks):
     #tasks is a dict as{'a.py':2, 'b.py':3}
