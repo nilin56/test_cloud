@@ -43,22 +43,22 @@ class mapreduce:
 
         if 'taskName' != 'capacity':
             print 123
-            c = check_capacity_before_map()
-            #capacity_list = self.check_capacity_before_map()
 
         resultList = []   
         threads = []
         
         nloops = range(len(CHILDREN[self.my_port()]))
 
-        for script, num in tasks.items():
-            if taskName == 'capacity':
-                tasks[script] = (num*1.0)
-            else:
-                tasks[script] = (num*1.0/len(nloops))
-
+	task = {}
         for i in nloops:
-            t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i], resultList, taskName, tasks))
+            if taskName == 'capacity':
+                task = tasks
+            else:
+            	capacitys = self.check_capacity_before_map()
+        	for script, num in tasks.items():
+                    task[script] = int(num*1.0*capacitys[CHILDREN[self.my_port()][i]]['capacity']/capacitys['sum']) + 1
+            
+            t = threading.Thread(target = call, args=(CHILDREN[self.my_port()][i], resultList, taskName, task))
             threads.append(t)
         for i in nloops:
             threads[i].start()
@@ -91,12 +91,13 @@ class mapreduce:
             return test_worker(tasks)
 
   
-    def check_capacity_before_map():
+    def check_capacity_before_map(self):
         resultList = {}
+	all_capa = 0
         for child in CHILDREN[self.my_port()]:
-            task = {"mem":1000,"latency":100,"cpu":0.005}
+            tasks = {"mem":1000,"latency":100,"cpu":0.005}
             query = '?request=' + json.dumps(tasks)
-            url = child+'/mapreduce/'+ taskName +query
+            url = child+'/mapreduce/'+ 'capacity' +query
             print 'call: %s'%child
             import urllib2
             import urllib
@@ -106,7 +107,10 @@ class mapreduce:
                 result = {'fail_node': [url]}
             print 'child(%s) get result'%child
             resultList[child] = result
+	    all_capa += result['capacity']
+	resultList['sum'] = all_capa
         print resultList
+	
         return resultList
 
     def my_port(self):
@@ -156,7 +160,7 @@ def call(child, resultList, taskName, tasks):
         result = json.loads(urllib.urlopen(url).read())
     except:
         result = {'fail_node': [url]}
-    print 'child(%s) get result'%child
+    print 'child(%s) get result'%child, tasks
     resultList.append(result)
   
 def latency(minute=None):
