@@ -60,7 +60,8 @@ class mapreduce:
         print 'map to children'
 
         if 'taskName' != 'capacity':
-            capacity_list = self.check_capacity_before_map()
+            print 123
+            #capacity_list = self.check_capacity_before_map()
 
         resultList = []   
         threads = []
