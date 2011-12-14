@@ -32,6 +32,25 @@ class mapreduce:
         else :
             return self.worker(taskName, tasks)
        
+    def check_capacity_before_map():
+        resultList = {}
+        for child in CHILDREN[self.my_port()]:
+            task = {"mem":1000,"latency":100,"cpu":0.005}
+            query = '?request=' + json.dumps(tasks)
+            url = child+'/mapreduce/'+ taskName +query
+            print 'call: %s'%child
+            import urllib2
+            import urllib
+            try:
+                result = json.loads(urllib.urlopen(url).read())
+            except:
+                result = {'fail_node': [url]}
+            print 'child(%s) get result'%child
+            resultList[child] = result
+        print resultList
+        return resultList
+            
+
 
     def mapreduce(self,taskName, tasks):
         return self.reducer(self.mapper(taskName, tasks))
@@ -39,6 +58,9 @@ class mapreduce:
     def mapper(self,taskName, tasks):
         import threading
         print 'map to children'
+
+        if 'taskName' != 'capacity':
+            capacity_list = check_capacity_before_map()
 
         resultList = []   
         threads = []
@@ -124,7 +146,7 @@ def capacity_worker(tasks):
 def call(child, resultList, taskName, tasks):
     query = '?request=' + json.dumps(tasks)
     url = child+'/mapreduce/'+ taskName +query
-    print 'call: %s'%url
+    print 'call: %s'%child
     import urllib2
     import urllib
     try:
