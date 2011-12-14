@@ -9,6 +9,26 @@ urls = (
     '/children','children',
     )
 app = web.application(urls, globals())
+ 
+def check_capacity_before_map():
+    resultList = {}
+    for child in CHILDREN[self.my_port()]:
+        task = {"mem":1000,"latency":100,"cpu":0.005}
+        query = '?request=' + json.dumps(tasks)
+        url = child+'/mapreduce/'+ taskName +query
+        print 'call: %s'%child
+        import urllib2
+        import urllib
+        try:
+            result = json.loads(urllib.urlopen(url).read())
+        except:
+            result = {'fail_node': [url]}
+        print 'child(%s) get result'%child
+        resultList[child] = result
+    print resultList
+    return resultList
+            
+
 
 class port:
     def GET(self,task=None):
@@ -31,27 +51,7 @@ class mapreduce:
             return self.mapreduce(taskName, tasks)
         else :
             return self.worker(taskName, tasks)
-       
-    def check_capacity_before_map():
-        resultList = {}
-        for child in CHILDREN[self.my_port()]:
-            task = {"mem":1000,"latency":100,"cpu":0.005}
-            query = '?request=' + json.dumps(tasks)
-            url = child+'/mapreduce/'+ taskName +query
-            print 'call: %s'%child
-            import urllib2
-            import urllib
-            try:
-                result = json.loads(urllib.urlopen(url).read())
-            except:
-                result = {'fail_node': [url]}
-            print 'child(%s) get result'%child
-            resultList[child] = result
-        print resultList
-        return resultList
-            
-
-
+      
     def mapreduce(self,taskName, tasks):
         return self.reducer(self.mapper(taskName, tasks))
             
@@ -61,7 +61,7 @@ class mapreduce:
 
         if 'taskName' != 'capacity':
             print 123
-            self.check_capacity_before_map()
+            c = check_capacity_before_map()
             #capacity_list = self.check_capacity_before_map()
 
         resultList = []   
